@@ -33,7 +33,7 @@ class Field {
 		}
 	}
 
-	// Your Code //
+	// Your Code : Move method //
 	moveRight() {
 		this.positionCol++;
 		this.checkPosition();
@@ -52,6 +52,7 @@ class Field {
 	}
 
 	checkPosition() {
+		// Move out of the field condition
 		if (this.positionRow < 0 || this.positionRow >= this.field.length ||
 			this.positionCol < 0 || this.positionCol >= this.field[0].length
 		) {
@@ -60,6 +61,7 @@ class Field {
 			return;
 		};
 
+		// Move to hole and hat condition
 		const position = this.field[this.positionRow][this.positionCol];
 
 		if (position === hole) {
@@ -72,22 +74,49 @@ class Field {
 			this.gameOver = true;
 			return;
 		}
-		this.field[this.positionRow][this.positionCol] = pathCharacter;
+		this.field[this.positionRow][this.positionCol] = pathCharacter; //Current position
 	}
 
-	static generateField(height, width, percentHole = 0.5) {
-		
+	static generateField(height, width, percentHole = 0.3) {
+		const field = []
+
+		for (let i = 0; i < height ; i++) {
+			const row = [];
+		for (let j = 0; j < width ; j++) {
+			const isHole = Math.random() < percentHole;
+			row.push(isHole ? hole : fieldCharacter);
+		}
+			field.push(row);
+		}
+
+		// Player position
+		field[0][0] = pathCharacter;
+
+		let hatX;
+		let hatY;
+		do { hatX = Math.floor(Math.random() * width);
+			hatY = Math.floor(Math.random() * height);
+		} while (hatX === 0 && hatY === 0)
+			field[hatX][hatY] = hat
+			return field;
 	}
 }
 
 
 // Game Mode ON
 // Remark: Code example below should be deleted and use your own code.
-const myGame = new Field([
-	["░", "░", "O"],
-	["░", "O", "░"],
-	["░", "^", "░"],
-]);
+// const myGame = new Field([
+// 	["░", "░", "O"],
+// 	["░", "O", "░"],
+// 	["░", "^", "░"],
+// ]);
+
+const height = 5;
+const width = 5;
+const percentHole = 0.3;
+
+const generateMap = Field.generateField(height, width, percentHole);
+const myGame = new Field(generateMap);
 
 while (!myGame.gameOver) {
 	myGame.print();
