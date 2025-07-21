@@ -19,7 +19,7 @@ class Field {
 		// Set the home position at (0, 0) before the game starts
 		this.positionRow = 0;
 		this.positionCol = 0;
-		this.field[this.positionRow][this.positionCol] = pathCharacter;
+		// this.field[this.positionRow][this.positionCol] = pathCharacter;
 		this.gameOver = false;
 	}
 
@@ -52,7 +52,7 @@ class Field {
 	}
 
 	checkPosition() {
-		// Move out of the field condition
+		// Move out of the field condition => Game Over
 		if (this.positionRow < 0 || this.positionRow >= this.field.length ||
 			this.positionCol < 0 || this.positionCol >= this.field[0].length
 		) {
@@ -61,7 +61,7 @@ class Field {
 			return;
 		};
 
-		// Move to hole and hat condition
+		// Move to hole and hat condition => Game Over
 		const position = this.field[this.positionRow][this.positionCol];
 
 		if (position === hole) {
@@ -74,12 +74,14 @@ class Field {
 			this.gameOver = true;
 			return;
 		}
-		this.field[this.positionRow][this.positionCol] = pathCharacter; //Current position
+		this.field[this.positionRow][this.positionCol] = pathCharacter; // Check current display position
 	}
 
+	// generate a random map, hole, hat, actor
 	static generateField(height, width, percentHole = 0.3) {
 		const field = []
 
+		// Random hole by percentage chance to respawn
 		for (let i = 0; i < height ; i++) {
 			const row = [];
 		for (let j = 0; j < width ; j++) {
@@ -89,38 +91,49 @@ class Field {
 			field.push(row);
 		}
 
+		// Random Player
+		let playerX;
+		let playerY;
+		do {
+			playerX = Math.floor(Math.random() * width);
+			playerY = Math.floor(Math.random() * height);
+		} while (field[playerX][playerY] === hole);
+		
 		// Player position
-		field[0][0] = pathCharacter;
+		field[playerX][playerY] = pathCharacter;
 
+		// Random hat
 		let hatX;
 		let hatY;
 		do { hatX = Math.floor(Math.random() * width);
 			hatY = Math.floor(Math.random() * height);
-		} while (hatX === 0 && hatY === 0)
-			field[hatX][hatY] = hat
-			return field;
+		} while (
+			(hatX === playerX && hatY === playerY) ||
+			field[hatX][hatY] === hole
+		);
+
+		// Hat position
+		field[hatX][hatY] = hat;
+
+			return {
+				field,
+				startX: playerX,
+				startY: playerY
+			};
 	}
 }
 
 
 // Game Mode ON
 // Remark: Code example below should be deleted and use your own code.
-// const myGame = new Field([
-// 	["░", "░", "O"],
-// 	["░", "O", "░"],
-// 	["░", "^", "░"],
-// ]);
-
-const height = 5;
-const width = 5;
-const percentHole = 0.3;
-
-const generateMap = Field.generateField(height, width, percentHole);
-const myGame = new Field(generateMap);
+const {field, startX, startY} = Field.generateField(10, 10, 0.3) // Destructuring
+const myGame = new Field(field);
+myGame.positionRow = startX;
+myGame.positionCol = startY;
 
 while (!myGame.gameOver) {
 	myGame.print();
-	const input = prompt("Which way ? : ");
+	const input = prompt("Which way ? : use w/s/a/d + enter ");
 
 	switch (input) {
 		case "w":
