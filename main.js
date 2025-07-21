@@ -27,10 +27,25 @@ class Field {
 		clear();
 
 		// Replace with your own code //
-		console.log(this.field); // Please REMOVE this line before you start your code!
+		for (let row of this.field) {
+			console.log(row.join(""));
+		}
+		// console.log(this.field); // Please REMOVE this line before you start your code!
 	}
 
 	// Your Code //
+	moveUp() {
+		this.positionRow--;
+	}
+	moveDown() {
+		this.positionRow++;
+	}
+	moveRight() {
+		this.positionCol--;
+	}
+	moveLeft() {
+		this.positionCol--;
+	}
 }
 
 // Game Mode ON
