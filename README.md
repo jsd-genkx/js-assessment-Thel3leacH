@@ -131,10 +131,20 @@
 
 ### Thinking Process
 
-1. // step 1
-2. // step 2
-3. // ...
-4. // step n
+1. // Create class Field to create a game and actor start by default position[x][y] is [0][0]
+2. // Check output by print method myGame and loop for clean layout with .join(" ").
+3. // Create move method by add 1 for each step of positionRow and positionCol.
+4. // Create input with while...loop for control actor by use switch case to check input is correct or not ?
+5. // Create gameOver to check condition if win (false) or lose (true).
+      - win = false means game is continue.
+      - lose = true means fix condition if you don't follow the rules.
+6. // From step 5 during to create checkPosition method for check if condition below :
+      - Player out of the field then game is over and message show you lose.
+      - Player fall into the hole then game is over and message show you lose.
+      - Player founded a hat then game is over and message show you win.
+7. // Create move method
+8. // Create move method
+9. // Create move method
 
 _Notes:_<br>
 _- You can attach flowcharts, diagrams, and images as needed._<br>
